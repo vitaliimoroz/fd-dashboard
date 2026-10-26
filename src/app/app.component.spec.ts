@@ -1,24 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app.component';
-import { PRODUCER_WORKER_FACTORY } from './core/producer.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [
-        provideRouter([]),
-        {
-          provide: PRODUCER_WORKER_FACTORY,
-          useValue: () => jasmine.createSpyObj('Worker', ['postMessage', 'terminate'])
-        }
-      ]
+      providers: [provideRouter([])]
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('renders the shell with a router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    expect(fixture.componentInstance).toBeTruthy();
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('h1')!.textContent).toContain('Realtime Fintech Dashboard');
+    expect(el.querySelector('router-outlet')).not.toBeNull();
   });
 });

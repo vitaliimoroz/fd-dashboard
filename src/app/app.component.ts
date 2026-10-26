@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ProducerService } from './core/producer.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +8,4 @@ import { ProducerService } from './core/producer.service';
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
-  protected readonly producer = inject(ProducerService);
-}
+export class AppComponent {}

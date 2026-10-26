@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProducerService } from '@app/core/producer.service';
 import { UNAVAILABLE } from '@app/shared/pipes/format';
 import { InstrumentMetrics, emptyMetrics } from '@shared/models/instrument-metrics';
+import { DEFAULT_SETTINGS } from '@shared/models/producer-settings';
 import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
@@ -18,7 +19,18 @@ describe('DashboardComponent', () => {
     instruments = signal(emptyMetrics(2));
     TestBed.configureTestingModule({
       imports: [DashboardComponent],
-      providers: [{ provide: ProducerService, useValue: { instruments } }]
+      providers: [
+        {
+          provide: ProducerService,
+          useValue: {
+            instruments,
+            status: signal('running'),
+            error: signal(null),
+            totalUpdates: signal(0),
+            settings: signal(DEFAULT_SETTINGS)
+          }
+        }
+      ]
     });
     fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();

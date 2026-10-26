@@ -1,0 +1,67 @@
+@use 'tokens' as t;
+
+.producer-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: t.$space-md t.$space-lg * 1.5;
+  padding-block: t.$space-sm t.$space-lg;
+}
+
+.status {
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem t.$space-sm;
+  border-radius: 999px;
+  font-weight: 600;
+  background: t.$color-surface;
+
+  &--running {
+    color: t.$color-positive;
+  }
+
+  &--paused {
+    color: t.$color-muted;
+  }
+
+  &--error {
+    color: t.$color-negative;
+  }
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$space-lg * 1.5;
+  margin: 0;
+
+  dt {
+    font-size: 0.8rem;
+    color: t.$color-muted;
+  }
+
+  dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.toggle {
+  min-width: 6rem;
+  padding: t.$space-xs t.$space-md;
+  font: inherit;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.error {
+  flex-basis: 100%;
+  margin: 0;
+  color: t.$color-negative;
+}

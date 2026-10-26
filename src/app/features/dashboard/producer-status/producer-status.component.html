@@ -1,0 +1,34 @@
+<section class="producer-status" aria-label="Producer">
+  <p class="status" aria-live="polite">
+    Producer:
+    <span class="badge badge--{{ producer.status() }}">{{ statusLabel() }}</span>
+  </p>
+
+  <dl class="facts">
+    <div>
+      <dt>Instruments</dt>
+      <dd>{{ producer.settings().instrumentCount }}</dd>
+    </div>
+    <div>
+      <dt>Nominal rate</dt>
+      <dd>{{ nominalRate() | number: '1.0-1' }} updates/s</dd>
+    </div>
+    <div>
+      <dt>Updates this run</dt>
+      <dd>{{ producer.totalUpdates() | number }}</dd>
+    </div>
+  </dl>
+
+  <button
+    type="button"
+    class="toggle"
+    (click)="toggle()"
+    [disabled]="producer.status() === 'error'"
+  >
+    {{ producer.status() === 'paused' ? 'Resume' : 'Pause' }}
+  </button>
+
+  @if (producer.error(); as error) {
+    <p class="error" role="alert">{{ error }}</p>
+  }
+</section>
