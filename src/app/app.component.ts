@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.worker.onmessage = ({ data }: MessageEvent<ProducerWorkerResponse>) => {
         this.producerStatus = data.type === 'error'
           ? `Initialization failed: ${data.message}`
-          : `Ready (Wasm ABI v${data.abiVersion})`;
+          : `Ready (Wasm ABI v${data.abiVersion}, sample batch of ${data.updateCount} updates)`;
       };
       this.worker.onerror = (event) => {
         this.producerStatus = `Worker failed to initialize: ${event.message}`;
@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, OnDestroy {
       const request: ProbeRequest = {
         type: 'probe',
         requestId: 1,
-        input: 1,
         wasmUrl: new URL('market-producer.wasm', document.baseURI).href
       };
       this.worker.postMessage(request);
