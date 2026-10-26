@@ -45,3 +45,7 @@ testem.log
 Thumbs.db
 .vercel
 .env*
+
+# Local AI tooling
+.claude/
+.playwright-mcp/
