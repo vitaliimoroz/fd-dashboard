@@ -5,25 +5,19 @@ import type {
   ProbeRequest,
   ProducerWorkerResponse
 } from './producer-worker-protocol';
+import { loadProducerWasm } from './wasm-loader';
 
 declare const self: DedicatedWorkerGlobalScope;
 
 self.onmessage = async ({ data }: MessageEvent<ProbeRequest>) => {
   try {
-    const wasmUrl = new URL('market-producer.wasm', self.location.origin);
-    const { instance } = await WebAssembly.instantiateStreaming(fetch(wasmUrl), {});
-    const abiVersion = instance.exports['abi_version'];
-    const probe = instance.exports['probe'];
-
-    if (typeof abiVersion !== 'function' || typeof probe !== 'function') {
-      throw new Error('The Wasm module is missing required probe exports.');
-    }
+    const producer = await loadProducerWasm(data.wasmUrl);
 
     const response: ProducerWorkerResponse = {
       type: 'probe-result',
       requestId: data.requestId,
-      abiVersion: abiVersion() as number,
-      output: probe(data.input) as number
+      abiVersion: producer.abi_version(),
+      output: producer.probe(data.input)
     };
     self.postMessage(response);
   } catch (error) {

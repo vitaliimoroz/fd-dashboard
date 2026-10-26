@@ -4,5 +4,5 @@
     "lib": ["ES2022", "WebWorker"],
     "types": []
   },
-  "include": ["src/producer.worker.ts", "src/producer-worker-protocol.ts"]
+  "include": ["src/producer.worker.ts", "src/producer-worker-protocol.ts", "src/wasm-loader.ts"]
 }

@@ -14,5 +14,6 @@ if ! command -v cargo >/dev/null 2>&1; then
   exit 1
 fi
 
-rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
+# Installs the toolchain, profile and targets pinned in rust-toolchain.toml.
+rustup toolchain install
 npm run build

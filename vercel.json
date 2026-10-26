@@ -4,8 +4,8 @@
   "outputDirectory": "dist/fd-dashboard/browser",
   "rewrites": [
     {
-      "source": "/settings",
-      "destination": "/"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

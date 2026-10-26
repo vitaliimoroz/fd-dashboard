@@ -6,7 +6,8 @@ integration; dashboard features are being built incrementally.
 
 ## Prerequisites
 
-- Node.js 22.13.1 (see `.node-version`)
+- Node.js 22.13.1 (see `.node-version`). Angular 19 does not support Node 24;
+  use nvm/fnm to switch locally.
 - Rust 1.99.1 (selected by `rust-toolchain.toml`; the Wasm target is installed
   by rustup)
 - Chrome for the Angular Karma/Jasmine browser tests
@@ -38,6 +39,6 @@ The generated `.wasm` file and Rust build output are not committed. The
 
 The `fd-dashboard` Vercel project builds the Wasm from source using
 `scripts/vercel-build.sh`, then builds Angular into
-`dist/fd-dashboard/browser`. Pushes to `main` are intended to trigger automatic
-production deployments. The public demo is at
+`dist/fd-dashboard/browser`. Every push to `main` triggers an automatic
+production deployment. The Rust version comes only from `rust-toolchain.toml`. The public demo is at
 https://fd-dashboard-beta.vercel.app/.

@@ -2,6 +2,8 @@ export interface ProbeRequest {
   type: 'probe';
   requestId: number;
   input: number;
+  /** Absolute URL of the Wasm module, resolved against the document base URI. */
+  wasmUrl: string;
 }
 
 export interface ProbeResult {
