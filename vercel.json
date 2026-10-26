@@ -1,0 +1,11 @@
+{
+  "installCommand": "npm ci",
+  "buildCommand": "bash scripts/vercel-build.sh",
+  "outputDirectory": "dist/fd-dashboard/browser",
+  "rewrites": [
+    {
+      "source": "/settings",
+      "destination": "/"
+    }
+  ]
+}
