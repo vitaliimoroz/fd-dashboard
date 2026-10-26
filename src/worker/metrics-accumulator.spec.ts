@@ -95,6 +95,18 @@ describe('MetricsAccumulator', () => {
     });
   });
 
+  it('reports VWAP as unavailable when traded volume is zero', () => {
+    const acc = new MetricsAccumulator(1);
+
+    // The generator never emits zero quantities, but the formula must still be safe.
+    acc.apply(records({ instrument: 0, priceCents: 10000, tradeQuantity: 0, ...book }));
+
+    const [metrics] = acc.snapshot();
+    expect(metrics.volume).toBe(0);
+    expect(metrics.vwapCents).toBeNull();
+    expect(metrics.lastPriceCents).toBe(10000);
+  });
+
   it('reports imbalance as unavailable when both book quantities are zero', () => {
     const acc = new MetricsAccumulator(1);
 

@@ -36,6 +36,33 @@ describe('loadProducerWasm', () => {
       /HTTP 404/
     );
   });
+
+  const respondWith = (bytes: BufferSource) => () =>
+    Promise.resolve(new Response(bytes, { headers: { 'Content-Type': 'application/octet-stream' } }));
+
+  it('rejects a valid module that lacks the producer exports', async () => {
+    const emptyModule = new Uint8Array([0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00]);
+
+    await expectAsync(
+      loadProducerWasm(wasmUrl, respondWith(emptyModule) as typeof fetch)
+    ).toBeRejectedWithError(/missing required exports/);
+  });
+
+  it('rejects a module built for a different ABI version', async () => {
+    const exports = {
+      memory: new WebAssembly.Memory({ initial: 1 }),
+      abi_version: () => EXPECTED_ABI_VERSION + 1,
+      init: () => 1,
+      generate: () => 0,
+      output_len: () => 0
+    };
+    // instantiate() is overloaded, so spyOn cannot infer which result type to expect.
+    (spyOn(WebAssembly, 'instantiate') as jasmine.Spy).and.resolveTo({ instance: { exports } });
+
+    await expectAsync(
+      loadProducerWasm(wasmUrl, respondWith(new ArrayBuffer(0)) as typeof fetch)
+    ).toBeRejectedWithError(`Unsupported Wasm ABI version ${EXPECTED_ABI_VERSION + 1}; expected ${EXPECTED_ABI_VERSION}.`);
+  });
 });
 
 describe('compiled Wasm generator', () => {

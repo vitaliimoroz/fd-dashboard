@@ -46,13 +46,19 @@ describe('ProducerService', () => {
   const latest = () => workers.at(-1)!;
   const custom: ProducerSettings = { instrumentCount: 3, updatesPerBatch: 50, batchIntervalMs: 100 };
 
+  let workerFactoryError: Error | undefined;
+
   beforeEach(() => {
     workers = [];
+    workerFactoryError = undefined;
     TestBed.configureTestingModule({
       providers: [
         {
           provide: PRODUCER_WORKER_FACTORY,
           useValue: () => {
+            if (workerFactoryError) {
+              throw workerFactoryError;
+            }
             const worker = new FakeWorker();
             workers.push(worker);
             return worker;
@@ -171,6 +177,32 @@ describe('ProducerService', () => {
 
     expect(service.status()).toBe('error');
     expect(service.error()).toContain('SyntaxError');
+  });
+
+  it('explains a worker script that failed to load without a message', () => {
+    latest().onerror?.call(latest() as unknown as Worker, new ErrorEvent('error', { cancelable: true }));
+
+    expect(service.error()).toBe('Producer worker failed: the script could not be loaded.');
+  });
+
+  it('reports a worker that cannot be created', () => {
+    workerFactoryError = new Error('Workers are not supported.');
+
+    service.apply(custom);
+
+    expect(service.status()).toBe('error');
+    expect(service.error()).toBe('Could not start the producer worker: Workers are not supported.');
+    expect(service.settings()).toEqual(custom);
+  });
+
+  it('goes back to initializing when resumed before the worker is ready', () => {
+    service.pause();
+
+    service.resume();
+
+    expect(service.status()).toBe('initializing');
+    latest().emitReady();
+    expect(service.status()).toBe('running');
   });
 
   it('clears the error when settings are applied again', () => {

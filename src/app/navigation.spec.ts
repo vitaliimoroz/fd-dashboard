@@ -80,6 +80,23 @@ describe('Navigation between dashboard and settings', () => {
     expect(harness.routeNativeElement!.querySelectorAll('tbody tr').length).toBe(3);
   });
 
+  it('discards an unapplied draft when leaving the settings page', async () => {
+    await harness.navigateByUrl('/settings');
+    const field = () => harness.routeNativeElement!.querySelector<HTMLInputElement>('#setting-instrumentCount')!;
+    field().value = '42';
+    field().dispatchEvent(new Event('input'));
+    harness.detectChanges();
+
+    await harness.navigateByUrl('/');
+    expect(harness.routeNativeElement!.querySelectorAll('tbody tr').length).toBe(5);
+
+    await harness.navigateByUrl('/settings');
+
+    expect(field().value).toBe('5'); // the active setting, not the abandoned draft
+    expect(workers.length).toBe(1);
+    expect(TestBed.inject(ProducerService).settings().instrumentCount).toBe(5);
+  });
+
   it('redirects unknown paths to the dashboard', async () => {
     await harness.navigateByUrl('/does-not-exist');
 
