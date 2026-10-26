@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prestart": "npm run build:wasm",
     "build": "ng build",
     "build:wasm": "node scripts/build-wasm.mjs",
     "prebuild": "npm run build:wasm",

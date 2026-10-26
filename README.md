@@ -1,59 +1,43 @@
-# FdDashboard
+# Realtime Fintech Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
+Angular 19 application with a Rust WebAssembly producer loaded directly in a
+module Web Worker. The current scaffold verifies the raw-Wasm build and worker
+integration; dashboard features are being built incrementally.
 
-## Development server
+## Prerequisites
 
-To start a local development server, run:
+- Node.js 22.13.1 (see `.node-version`)
+- Rust 1.99.1 (selected by `rust-toolchain.toml`; the Wasm target is installed
+  by rustup)
+- Chrome for the Angular Karma/Jasmine browser tests
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Run locally
 
 ```bash
-ng generate component component-name
+npm ci
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+`npm start` builds the Wasm module into `public/market-producer.wasm` before
+starting Angular on `http://localhost:4200/`.
+
+## Build and test
 
 ```bash
-ng generate --help
+npm run build
+cargo test --manifest-path wasm-producer/Cargo.toml
+npm run build:wasm
+npx ng test --watch=false --browsers=ChromeHeadless
 ```
 
-## Building
+The generated `.wasm` file and Rust build output are not committed. The
+`scripts/build-wasm.mjs` script compiles the pinned Rust source for
+`wasm32-unknown-unknown` and copies the artifact into `public/`.
 
-To build the project run:
+## Deployment
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The `fd-dashboard` Vercel project builds the Wasm from source using
+`scripts/vercel-build.sh`, then builds Angular into
+`dist/fd-dashboard/browser`. Pushes to `main` are intended to trigger automatic
+production deployments. The public demo is at
+https://fd-dashboard-beta.vercel.app/.
