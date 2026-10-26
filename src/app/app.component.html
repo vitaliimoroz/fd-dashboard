@@ -12,4 +12,5 @@
   } @else {
     <button type="button" (click)="producer.pause()" [disabled]="producer.status() === 'error'">Pause</button>
   }
+  <router-outlet />
 </main>

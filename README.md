@@ -45,6 +45,8 @@ src/
                    metrics accumulator
   app/core/        app-wide singletons (ProducerService owns the worker)
   app/features/    routed pages (dashboard, settings)
+  app/shared/      reusable UI building blocks (pipes/, components/)
+  styles/          Sass partials, e.g. _tokens.scss (shared variables)
 wasm-producer/     Rust generator compiled to raw Wasm (see ABI.md)
 ```
 

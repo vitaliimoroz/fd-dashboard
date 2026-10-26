@@ -1,0 +1,49 @@
+@use 'tokens' as t;
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+caption {
+  text-align: left;
+  padding-block: t.$space-sm;
+  color: t.$color-muted;
+}
+
+th,
+td {
+  padding: t.$space-xs t.$space-md;
+  border-bottom: 1px solid t.$color-border;
+  white-space: nowrap;
+}
+
+th {
+  text-align: left;
+}
+
+thead th {
+  background: t.$color-surface;
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+// Declared after `th` so numeric headers are right-aligned too.
+.num {
+  text-align: right;
+}
+
+.positive {
+  color: t.$color-positive;
+}
+
+.negative {
+  color: t.$color-negative;
+}
