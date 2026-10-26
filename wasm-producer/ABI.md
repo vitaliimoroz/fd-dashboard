@@ -2,7 +2,7 @@
 
 The worker fetches `public/market-producer.wasm` and instantiates it directly;
 there is no generated JavaScript glue and the module has no imports. The
-TypeScript side of this contract lives in `src/wasm-loader.ts`.
+TypeScript side of this contract lives in `src/worker/wasm-loader.ts`.
 
 ## Exports
 

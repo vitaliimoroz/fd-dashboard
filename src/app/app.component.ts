@@ -1,42 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import type { ProbeRequest, ProducerWorkerResponse } from '../producer-worker-protocol';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ProducerService } from './core/producer.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
-  producerStatus = 'Initializing the WebAssembly producer...';
-  private worker?: Worker;
-
-  ngOnInit(): void {
-    try {
-      this.worker = new Worker(new URL('../producer.worker', import.meta.url), {
-        type: 'module'
-      });
-      this.worker.onmessage = ({ data }: MessageEvent<ProducerWorkerResponse>) => {
-        this.producerStatus = data.type === 'error'
-          ? `Initialization failed: ${data.message}`
-          : `Ready (Wasm ABI v${data.abiVersion}, sample batch of ${data.updateCount} updates)`;
-      };
-      this.worker.onerror = (event) => {
-        this.producerStatus = `Worker failed to initialize: ${event.message}`;
-      };
-      const request: ProbeRequest = {
-        type: 'probe',
-        requestId: 1,
-        wasmUrl: new URL('market-producer.wasm', document.baseURI).href
-      };
-      this.worker.postMessage(request);
-    } catch (error) {
-      this.producerStatus = `Worker failed to initialize: ${
-        error instanceof Error ? error.message : 'Unknown error.'
-      }`;
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.worker?.terminate();
-  }
+export class AppComponent {
+  protected readonly producer = inject(ProducerService);
 }

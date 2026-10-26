@@ -35,6 +35,22 @@ The generated `.wasm` file and Rust build output are not committed. The
 `scripts/build-wasm.mjs` script compiles the pinned Rust source for
 `wasm32-unknown-unknown` and copies the artifact into `public/`.
 
+## Project structure
+
+```
+src/
+  shared/models/   framework-free contracts used by both threads
+                   (settings, instrument metrics, worker messages)
+  worker/          Web Worker only, no Angular: Wasm loader, run engine,
+                   metrics accumulator
+  app/core/        app-wide singletons (ProducerService owns the worker)
+  app/features/    routed pages (dashboard, settings)
+wasm-producer/     Rust generator compiled to raw Wasm (see ABI.md)
+```
+
+Path aliases `@app/*`, `@shared/*` and `@worker/*` are defined in
+`tsconfig.json`. Within a folder, imports stay relative.
+
 ## Deployment
 
 The `fd-dashboard` Vercel project builds the Wasm from source using

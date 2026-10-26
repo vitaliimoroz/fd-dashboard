@@ -2,7 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "lib": ["ES2022", "WebWorker"],
-    "types": []
+    "types": [],
+    // Replaces the base paths: worker code must not import from @app.
+    "paths": {
+      "@shared/*": ["./src/shared/*"],
+      "@worker/*": ["./src/worker/*"]
+    }
   },
-  "include": ["src/producer.worker.ts", "src/producer-worker-protocol.ts", "src/wasm-loader.ts"]
+  "include": ["src/worker/**/*.ts", "src/shared/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
 }

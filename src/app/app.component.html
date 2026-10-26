@@ -1,4 +1,15 @@
 <main>
   <h1>Realtime Fintech Dashboard</h1>
-  <p aria-live="polite">Producer status: <strong>{{ producerStatus }}</strong></p>
+  <p aria-live="polite">
+    Producer status: <strong>{{ producer.status() }}</strong>
+    @if (producer.error(); as error) {
+      — {{ error }}
+    }
+  </p>
+  <p>Updates generated: {{ producer.totalUpdates() }}</p>
+  @if (producer.status() === 'paused') {
+    <button type="button" (click)="producer.resume()">Resume</button>
+  } @else {
+    <button type="button" (click)="producer.pause()" [disabled]="producer.status() === 'error'">Pause</button>
+  }
 </main>
