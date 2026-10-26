@@ -1,0 +1,69 @@
+@use 'tokens' as t;
+
+.settings {
+  max-width: 28rem;
+}
+
+h2 {
+  margin-block: 0 t.$space-sm;
+}
+
+.intro {
+  margin-block: 0 t.$space-lg;
+  color: t.$color-muted;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: t.$space-lg;
+
+  label {
+    font-weight: 600;
+  }
+
+  input {
+    max-width: 10rem;
+    padding: t.$space-xs t.$space-sm;
+    font: inherit;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+  }
+
+  &--invalid input {
+    border-color: t.$color-negative;
+  }
+}
+
+.hint {
+  color: t.$color-muted;
+}
+
+.error {
+  color: t.$color-negative;
+}
+
+.rate {
+  margin-block: 0 t.$space-lg;
+}
+
+.actions {
+  display: flex;
+  gap: t.$space-md;
+
+  button {
+    padding: t.$space-xs t.$space-md;
+    font: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.applied {
+  min-height: 1.5em;
+  color: t.$color-positive;
+}

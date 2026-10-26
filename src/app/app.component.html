@@ -1,4 +1,13 @@
-<main>
+<header class="app-header">
   <h1>Realtime Fintech Dashboard</h1>
+  <nav aria-label="Main">
+    <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">
+      Dashboard
+    </a>
+    <a routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page">Settings</a>
+  </nav>
+</header>
+
+<main>
   <router-outlet />
 </main>

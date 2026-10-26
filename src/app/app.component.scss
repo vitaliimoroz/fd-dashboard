@@ -1,0 +1,37 @@
+@use 'tokens' as t;
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: t.$space-sm t.$space-lg * 2;
+  margin-bottom: t.$space-sm;
+  border-bottom: 1px solid t.$color-border;
+
+  h1 {
+    margin: 0 0 t.$space-sm;
+    font-size: 1.5rem;
+  }
+}
+
+nav {
+  display: flex;
+  gap: t.$space-lg;
+
+  a {
+    padding-block: t.$space-sm;
+    color: t.$color-muted;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      color: t.$color-text;
+    }
+
+    &.active {
+      color: t.$color-text;
+      font-weight: 600;
+      border-bottom-color: currentColor;
+    }
+  }
+}

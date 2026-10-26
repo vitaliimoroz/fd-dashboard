@@ -1,0 +1,43 @@
+<form class="settings" [formGroup]="form" (ngSubmit)="apply()" novalidate>
+  <h2>Producer settings</h2>
+  <p class="intro">Changes take effect when you apply them. Applying starts a new run and clears all values.</p>
+
+  @for (field of fields; track field.key) {
+    @let error = errorFor(field.key);
+    <div class="field" [class.field--invalid]="error">
+      <label [for]="'setting-' + field.key">{{ field.label }}</label>
+      <input
+        type="number"
+        inputmode="numeric"
+        step="1"
+        [id]="'setting-' + field.key"
+        [min]="limits[field.key].min"
+        [max]="limits[field.key].max"
+        [formControlName]="field.key"
+        [attr.aria-invalid]="error ? true : null"
+        [attr.aria-describedby]="'hint-' + field.key + (error ? ' error-' + field.key : '')"
+      />
+      <small class="hint" [id]="'hint-' + field.key">
+        {{ field.hint }} Whole number, {{ limits[field.key].min | number }}–{{ limits[field.key].max | number }}.
+      </small>
+      @if (error) {
+        <small class="error" [id]="'error-' + field.key">{{ error }}</small>
+      }
+    </div>
+  }
+
+  @if (form.valid && nominalRate(); as rate) {
+    <p class="rate">≈ {{ rate | number: '1.0-1' }} updates/s across all instruments.</p>
+  }
+
+  <div class="actions">
+    <button type="submit" class="primary" [disabled]="form.invalid">Apply</button>
+    <button type="button" (click)="restoreDefaults()">Restore defaults</button>
+  </div>
+
+  <p class="applied" aria-live="polite">
+    @if (applied()) {
+      Applied. A new run started with these settings.
+    }
+  </p>
+</form>
